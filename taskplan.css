@@ -1,0 +1,89 @@
+body {
+   font-style: normal;
+	font-family: Tahoma, Geneva, sans-serif;
+	background: #F9F9F9;
+	color: #404040;
+        font-size: 0.8em;
+}
+
+h1  {
+    text-align: center;
+}
+
+#titlediv  p  {
+   text-align: center;
+}
+
+#map {
+    width: 65%;
+    height: 85vh;
+    margin-bottom: 15px;
+    display: inline-block;
+    float: left;
+}
+#controldiv {
+display: inline-block;
+width: 30%;
+margin-left: 20px;
+margin-right: 20px;
+height: 50vh;
+}
+
+#printctrl {
+display: inline-block;
+width: 30%;
+margin-left: 20px;
+margin-right: 20px;
+}
+
+#acceptor {
+float: right;
+}
+
+#disclaimer {
+position: absolute;
+top:  300px;
+left: 300px;
+width: 30%;
+height: 250px;
+padding: 30px;
+border-style: solid;
+border-width: 2px;
+z-index: 200;
+background-color: white;
+}
+
+#maincontrol {
+  display: none;
+}
+
+#tasktab {
+width: 100%;
+}
+
+#tasktab td {
+padding-left: 5px;
+padding-right: 5px;
+}
+
+#tasktab  button {
+    width: 15px;
+    padding: 0px;
+}
+
+#tasksheet, #declaration {
+margin-left:  30px;
+}
+   
+.infoBox {
+      border:  1px solid black;
+		  text-align:  center;
+		  font-size: 8pt;
+                   background-color: #FFFFFF;
+                    padding-left: 3px;
+                  padding-right: 3px;
+                  white-space: nowrap;
+                 opacity: 0.8;
+                 z-index: 200;
+}
+   
