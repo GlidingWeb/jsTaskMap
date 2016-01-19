@@ -10,6 +10,7 @@
   var labelList = [];
   var labelsShowing = false;
   var taskdef = [];
+  var taskLine = null;
   var airDrawOptions = {
     strokeColor: 'black',
     strokeOpacity: 0.8,
@@ -19,24 +20,23 @@
     clickable: false
   };
 
-  function leginfo(start, end) {
-    var earthrad = 6378; // km
-    var lat1 = start['lat'] * Math.PI / 180;
-    var lat2 = end['lat'] * Math.PI / 180;
-    var lon1 = start['lng'] * Math.PI / 180;
-    var lon2 = end['lng'] * Math.PI / 180;
-    var deltaLat = lat2 - lat1;
-    var deltaLon = (end['lng'] - start['lng']) * Math.PI / 180;
-    var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = earthrad * c;
-    var y = Math.sin(lon2 - lon1) * Math.cos(lat2);
-    var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-    var brng = Math.round((360 + Math.atan2(y, x) * 180 / Math.PI) % 360);
-    return {
-      distance: d,
-      bearing: brng
-    };
+  function initPoints() {
+    var i;
+    for (i = 0; i < tpinfo.length; i++) {
+      markerList[i].setMap(null);
+      labelList[i].close();
+    }
+    markerList = [];
+    tpinfo = [];
+    labelList = [];
+    if (taskLine) {
+      taskLine.setMap(null);
+      taskLine = null;
+    }
+    taskdef = [];
+    $('#tasktab').html("");
+    $('#tasklength').text("");
+    $('.printbutton').prop("disabled", true);
   }
 
   function bindTaskButtons() {
@@ -52,19 +52,6 @@
       }
       updateTask();
     });
-  }
-
-  function showpoint(point) {
-    var latdegrees = Math.abs(point.lat);
-    var latdegreepart = Math.floor(latdegrees);
-    var latminutepart = 60 * (latdegrees - latdegreepart);
-    var latdir = (point.lat > 0) ? "N" : "S";
-    var lngdegrees = Math.abs(point.lng);
-    var lngdegreepart = Math.floor(lngdegrees);
-    var lngminutepart = 60 * (lngdegrees - lngdegreepart);
-    var lngdir = (point.lng > 0) ? "E" : "W";
-    var retstr = latdegreepart.toString() + "&deg;" + latminutepart.toFixed(3) + "&prime;" + latdir + " " + lngdegreepart.toString() + "&deg;" + lngminutepart.toFixed(3) + "&prime;" + lngdir;
-    return retstr;
   }
 
   function updateTask() {
@@ -106,18 +93,27 @@
       if (i > 0) {
         distance += leginfo(tpinfo[taskdef[i - 1]], tpinfo[pointref]).distance;
       }
-      var taskLine = new google.maps.Polyline({
+      if (taskLine) {
+        taskLine.setMap(null);
+        taskLine = null;
+      }
+      taskLine = new google.maps.Polyline({
         path: taskcoords,
         strokeColor: 'black',
         strokeOpacity: 1.0,
         strokeWeight: 2
       });
       taskLine.setMap(map);
+      if (taskcoords.length === 2) {
+        $('.printbutton').prop("disabled", false);
+      }
+      if (taskcoords.length === 1) {
+        $('.printbutton').prop("disabled", true);
+      }
     }
 
     if (distance > 0) {
       $('#tasklength').text("Task length: " + (distance).toFixed(1) + "Km");
-      //mapLayers.tasklayer=L.polyline(coordlist,{color: 'black'}).addTo(map);
     }
     bindTaskButtons();
   }
@@ -127,7 +123,7 @@
     var latitude;
     var longitude;
     var matched = false;
-    var cupRegex = /^\"?([\w\s\d]+)\"?,\"?([\w\s\d]*)\"?,\"?[A-Z]{0,2}\"?,\"?(\d{4}.\d{3})([NS])\"?,\"?(\d{5}.\d{3})([EW])\"?,[\w\s\d.]*,\d?,[\s\d]*,[\s\d\w\.]*,\"?[\d.]*.\"?(.*)\"?/;
+    var cupRegex = /^\"?([\w\s\d]+)\"?,\"?([\w\s\d]*)\"?,\"?[A-Z]{0,2}\"?,\"?(\d{4}.\d{3})([NS])\"?,\"?(\d{5}.\d{3})([EW])\"?,[\w\s\d.]*,\d?,[\s\d]*,[\s\d\w\.]*,\"?[\d.]*.\"?([^"]*)\"?/;
     var datRegex = /^([\d]+),([\d]{2}):([\d\.]{2,})([NS]),([\d]{3}):([\d\.]{2,})([EW]),[\d\w]*,[\w],([\d\w\s]*),([\d\w\s]*)/;
     switch (extension) {
       case ".CUP":
@@ -200,7 +196,7 @@
 
   function makeMarker(markerinfo) {
     var marker = new google.maps.Marker({
-      icon: "marker-icon.png",
+      icon: 'marker-icon.png',
       position: {
         lat: markerinfo.lat,
         lng: markerinfo.lng
@@ -350,11 +346,22 @@
   function showLabels() {
     var mapbounds = map.getBounds();
     var i;
+    var j;
+    var labelShowlist = [];
+    var showing = true;
     for (i = 0; i < markerList.length; i++) {
       if (mapbounds.contains(markerList[i].getPosition())) {
-        labelList[i].open(map, markerList[i]);
+        labelShowlist.push(i);
       } else {
         labelList[i].close();
+      }
+    }
+    var showing = (labelShowlist.length < 400);
+    for (j = 0; j < labelShowlist.length; j++) {
+      if (showing) {
+        labelList[labelShowlist[j]].open(map, markerList[labelShowlist[j]]);
+      } else {
+        labelList[labelShowlist[j]].close();
       }
     }
   }
@@ -391,6 +398,16 @@
     showMarkers();
   }
 
+  function exportTask(url) {
+    var taskdetail = [];
+    var i;
+    for (i = 0; i < taskdef.length; i++) {
+      taskdetail.push(tpinfo[taskdef[i]]);
+    }
+    var w = window.open(url, "_blank");
+    w.task = taskdetail;
+  }
+
   $(document).ready(function() {
     var mapOpt = {
       center: new google.maps.LatLng(0, 0),
@@ -400,6 +417,7 @@
     };
     map = new google.maps.Map($('#map').get(0), mapOpt);
 
+    //makeIcon();
     $(' input[name=wpt_vis]:radio').change(function() {
       if ($(this).val() === 'show') {
         showMarkers();
@@ -424,10 +442,12 @@
       if (this.files.length > 0) {
         var extension = this.value.substr(-4).toUpperCase();
         if (filetypes.indexOf(extension) >= 0) {
+          initPoints();
           var reader = new FileReader();
           reader.onload = function(e) {
             mapbounds = parseTps(this.result, extension);
             if (markerList.length > 1) {
+              $('#maincontrol').show();
               kickitoff(mapbounds);
             } else {
               alert("Sorry, file type incorrect");
@@ -446,7 +466,7 @@
 
     $('#acceptor').click(function() {
       $('#disclaimer').hide();
-      $('#maincontrol').show();
+      $('#fileselect').show();
     });
 
     map.addListener('idle', function() {
@@ -454,6 +474,14 @@
       if (labelsShowing) {
         showLabels();
       }
+    });
+
+    $('#tasksheet').click(function() {
+      exportTask("taskbrief.html");
+    });
+
+    $('#declaration').click(function() {
+      exportTask("declaration.html");
     });
 
     var airspaceClip = '';

@@ -26,12 +26,16 @@ display: inline-block;
 width: 30%;
 margin-left: 20px;
 margin-right: 20px;
-height: 50vh;
+height: 60vh;
+}
+
+#fileselect {
+display: none;
 }
 
 #printctrl {
 display: inline-block;
-width: 30%;
+width: 100%;
 margin-left: 20px;
 margin-right: 20px;
 }
@@ -55,6 +59,13 @@ background-color: white;
 
 #maincontrol {
   display: none;
+}
+
+#tasksection {
+ width: 100%;
+ height: 30vh;
+ text-align: center;
+ overflow: auto;
 }
 
 #tasktab {

@@ -1,0 +1,128 @@
+@media only screen {
+
+body {
+   font-style: normal;
+	font-family: Tahoma, Geneva, sans-serif;
+	background: #F9F9F9;
+	color: #404040;
+        font-size: 1.0em;
+}
+
+div.content     {
+		width: 920px;
+		margin: auto;
+		padding:20px 30px 10px 30px;
+		background: #f9F9F9;
+		}
+
+h1  {
+    text-align: center;
+}
+
+table {
+    margin: auto;
+}
+
+.userdata  th  {
+    border: none;
+    text-align: right;
+    padding: 5px;
+}
+
+.userdata  td  {
+    border: none;
+    padding: 5px;
+}
+
+#buttondiv  {
+float: right;
+text-align: right;
+}
+
+#route   th , #route td   {
+   border: none;
+   text-align: left;
+   padding: 5px;
+}
+}
+
+@media only print {
+    body {
+   font-style: normal;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+}
+
+h1  {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 16pt;
+    text-align: center;
+}
+
+input   {
+border-style: none;
+ font-family: "Times New Roman", Times, serif;
+ font-size: 11pt;
+}
+
+table {
+    width: 100%;
+    margin: auto;
+    font-size: 11pt;
+}
+
+#buttondiv {
+  display: none;
+}
+
+#warning  {
+display: none;
+}
+}
+
+tr {
+    height: 2em;
+}
+
+h4  {
+    display: inline;
+    font-size: 1.0em;
+    font-weight: bold;
+}
+
+h3  {
+    text-align: center;;
+    font-size: 1.0em;
+    font-weight: bold;
+}
+
+div.table {
+    display: table;
+}
+
+div.row  {
+    display: table-row;
+}
+
+div.cell  {
+    display: table-cell;
+    height: 1.5em;
+    vertical-align: top;
+    padding-top: 15px;
+}
+
+div.underline  {
+    width: 250px;
+      border-bottom: 1px solid;
+}
+
+div.cellcontent {
+    font-weight:bold;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+
+
+
+

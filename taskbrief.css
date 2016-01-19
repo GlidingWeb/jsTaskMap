@@ -1,0 +1,104 @@
+@media only screen {
+
+body {
+   font-style: normal;
+	font-family: Tahoma, Geneva, sans-serif;
+	background: #F9F9F9;
+	color: #404040;
+        font-size: 0.8em;
+}
+
+div.content     {
+		width: 920px;
+		margin: auto;
+		padding:20px 30px 10px 30px;
+		background: #f9F9F9;
+		}
+
+h1  {
+    text-align: center;
+}
+
+h4  {
+    display: inline;
+    font-size: 1.0em;
+    font-weight: bold;
+}
+
+
+table {
+    width: 90%;
+    margin: auto;
+    border-collapse:  collapse;
+}
+
+#buttondiv  {
+float: right;
+text-align: right;
+}
+
+#warningbox  {
+   width: 85%;
+   margin: auto;
+}
+
+}
+@media only print {
+    body {
+   font-style: normal;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+}
+
+h1  {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 16pt;
+    text-align: center;
+}
+
+h4  {
+    display: inline;
+    font-weight: bold;
+}
+
+input,textarea   {
+border-style: none;
+ font-family: "Times New Roman", Times, serif;
+ font-size: 12pt;
+}
+
+table {
+    width: 100%;
+    margin: auto;
+    border-collapse:  collapse;
+    font-size: 10pt;
+}
+
+#buttondiv {
+  display: none;
+}
+
+#warningbox  {
+   width: 100%;
+   margin: auto;
+}
+}
+    
+th, td {
+    border: 1px solid black;
+    padding: 2pt;
+}
+
+#tasklength  {
+  text-align:center;
+}
+
+textarea  {
+    width: 100%;
+    margin: auto;
+    height: 10em;
+}
+
+
+
+
