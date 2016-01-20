@@ -124,7 +124,7 @@
     var longitude;
     var matched = false;
     var cupRegex = /^\"?([\w\s\d]+)\"?,\"?([\w\s\d]*)\"?,\"?[A-Z]{0,2}\"?,\"?(\d{4}.\d{3})([NS])\"?,\"?(\d{5}.\d{3})([EW])\"?,[\w\s\d.]*,\d?,[\s\d]*,[\s\d\w\.]*,\"?[\d.]*.\"?([^"]*)\"?/;
-    var datRegex = /^([\d]+),([\d]{2}):([\d\.]{2,})([NS]),([\d]{3}):([\d\.]{2,})([EW]),[\d\w]*,[\w],([\d\w\s]*),([\d\w\s]*)/;
+    var datRegex = /^([\d]+),([\d]{2}):([\d\.]{2,})([NS]),([\d]{3}):([\d\.]{2,})([EW]),[\d\w]*,[\w]*,([\d\w\s]*),([\d\w\s]*)/;
     switch (extension) {
       case ".CUP":
         var cupMatch = tpLine.match(cupRegex);
