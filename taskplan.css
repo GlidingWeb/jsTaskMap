@@ -6,6 +6,16 @@ body {
         font-size: 0.8em;
 }
 
+ #help, #about {
+  position: absolute;
+  top:10px;
+  font-weight: bold;
+  }
+
+  #about {
+  right: 10px;
+  }
+
 h1  {
     text-align: center;
 }

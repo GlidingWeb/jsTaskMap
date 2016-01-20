@@ -436,6 +436,14 @@
       }
     });
 
+    $('#help').click(function () {
+            window.open("taskplanhelp.html", "_blank");
+        });
+
+    $('#about').click(function () {
+            window.open("taskplanabout.html", "_blank");
+        });
+    
     $('#fileControl').change(function() {
       var filetypes = [".CUP", ".DAT"];
       var mapbounds;
