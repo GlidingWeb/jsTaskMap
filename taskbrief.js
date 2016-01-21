@@ -1,7 +1,6 @@
  (function($) {
-   'use strict';
-
-   function showtask() {
+   'use strict';  
+   function showtask(task) {
      var i;
      var row;
      var tpref;
@@ -39,7 +38,7 @@
      $('#datepick').dcalendarpicker({
        format: 'w dd mmmm yyyy'
      });
-     showtask();
+       showtask(window.opener.taskdetail);
      $("#printme").click(function() {
        window.print();
      });

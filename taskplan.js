@@ -1,3 +1,6 @@
+//Outside JQuery namespace to allow communication to child windows
+var taskdetail=[];
+
 (function($) {
   'use strict';
   var map;
@@ -123,8 +126,8 @@
     var latitude;
     var longitude;
     var matched = false;
-    var cupRegex = /^\"?([\w\s\d]+)\"?,\"?([\w\s\d]*)\"?,\"?[A-Z]{0,2}\"?,\"?(\d{4}.\d{3})([NS])\"?,\"?(\d{5}.\d{3})([EW])\"?,[\w\s\d.]*,\d?,[\s\d]*,[\s\d\w\.]*,\"?[\d.]*.\"?([^"]*)\"?/;
-    var datRegex = /^([\d]+),([\d]{2}):([\d\.]{2,})([NS]),([\d]{3}):([\d\.]{2,})([EW]),[\d\w]*,[\w]*,([\d\w\s]*),([\d\w\s]*)/;
+    var cupRegex=/^\"?([^\"]*)\"?,\"?([\w\d]*)\"?,\"?[A-Z]{0,2}\"?,\"?(\d{4}.\d{3})([NS])\"?,\"?(\d{5}.\d{3})([EW])\"?,[\w\s\d.]*,\d?,[\s\d]*,[\s\d\w\.]*,\"?[\d.]*.\"?([^"]*)\"?/; 
+    var datRegex = /^([\d]+),([\d]{2}):([\d\.]{2,})([NS]),([\d]{3}):([\d\.]{2,})([EW]),[\d\w]*,[\w]*,([^,]*),([^,]*)/;
     switch (extension) {
       case ".CUP":
         var cupMatch = tpLine.match(cupRegex);
@@ -181,6 +184,7 @@
           }
           lineout.detail = datMatch[9];
         } else {
+            alert(tpLine);
           matched = false;
         }
         break;
@@ -399,13 +403,12 @@
   }
 
   function exportTask(url) {
-    var taskdetail = [];
+     taskdetail = [];
     var i;
     for (i = 0; i < taskdef.length; i++) {
       taskdetail.push(tpinfo[taskdef[i]]);
     }
-    var w = window.open(url, "_blank");
-    w.task = taskdetail;
+    window.open(url, "_blank");
   }
 
   $(document).ready(function() {
@@ -416,8 +419,6 @@
       streetViewControl: false
     };
     map = new google.maps.Map($('#map').get(0), mapOpt);
-
-    //makeIcon();
     $(' input[name=wpt_vis]:radio').change(function() {
       if ($(this).val() === 'show') {
         showMarkers();
