@@ -11,22 +11,22 @@
 <script  src="taskplan.js"></script>
 <link rel="stylesheet" href="taskplan.css" />
 </head>
-
 <body>
+<div id='titlediv'>
     <button id='help'>Help</button>
     <button id='about'>About</button>
 <h1>XCWebPlan</h1>
- <div id='titlediv'>
     <p>
         A free browser-based tool for planning soaring tasks.
     </p>
       <p> &copy; 2016 Alistair Malcolm Green and Richard Brisbourne </p>
 </div>
-    <noscript>
+<noscript>
         <p>
             <strong>Please enable JavaScript to use this application.</strong>
         </p>
     </noscript>
+<div id="maincontainer">
 <div id="map"></div>
  <div id="controldiv">
    <p>
@@ -46,30 +46,27 @@
         <label for="fileControl">Select a turning point file:</label>
         <input id="fileControl" type="file" accept=".cup,.dat" />
     </p>
-     <div id="maincontrol">
+  <div id="maincontrol">
     <p>Show waypoints: <input type="radio" name="wpt_vis" value="show" />&nbsp; &nbsp;  Hide waypoints:  <input type="radio" name="wpt_vis" value="hide" />
   </p>
   <p>Show labels: <input type="radio" name="label_vis" value="show" />&nbsp; &nbsp;  Hide labels:  <input type="radio" name="label_vis" value="hide" />
   </p>
 <p>Click marker on map to add start/TP/Finish.</p>
 <p>Up arrow on list to move TP up, "X" to delete.</p>
-<div id="tasksection">
-<hr/>
+<hr />
 <table>
 <tbody id="tasktab">
 </tbody>
 </table>
 <p id="tasklength"></p>
-
-</div>
-<hr/>
-<div id='printctrl'>
+ <hr />
  <h4>Print:</h4>
  <button id="tasksheet" class="printbutton" disabled>Task Briefing</button><button id="declaration" class="printbutton" disabled>Declaration</button>
     </div>
    </div>
    </div>
-    <div id='disclaimer'>
+  
+  <div id='disclaimer'>
        <p>
     <b>Warning:</b> Unless the "no airspace" option is selected opposite, outlines of controlled airspace  will be displayed on the map provided we have data for the area.</p>
     <p>This information is for guidance only.  It  may not be accurate,  current or complete and is not valid for navigation or flight planning.   Always consult the official publications for current and correct information. 

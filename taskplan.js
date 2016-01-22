@@ -184,7 +184,6 @@ var taskdetail=[];
           }
           lineout.detail = datMatch[9];
         } else {
-            alert(tpLine);
           matched = false;
         }
         break;

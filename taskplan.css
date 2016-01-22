@@ -6,6 +6,12 @@ body {
         font-size: 0.8em;
 }
 
+#maincontainer {
+    display: table;
+    border-collapse:collapse;
+    width:  100%;
+}
+
  #help, #about {
   position: absolute;
   top:10px;
@@ -20,34 +26,27 @@ h1  {
     text-align: center;
 }
 
+#titlediv  {
+    height: 8em;
+}
+
 #titlediv  p  {
    text-align: center;
 }
 
 #map {
     width: 65%;
-    height: 85vh;
-    margin-bottom: 15px;
-    display: inline-block;
-    float: left;
+    display: table-cell;
+    height:  calc(100vh - 12em);
 }
+
 #controldiv {
-display: inline-block;
-width: 30%;
-margin-left: 20px;
-margin-right: 20px;
-height: 60vh;
+display: table-cell;
+padding-left: 15px;
 }
 
 #fileselect {
 display: none;
-}
-
-#printctrl {
-display: inline-block;
-width: 100%;
-margin-left: 20px;
-margin-right: 20px;
 }
 
 #acceptor {
@@ -55,27 +54,26 @@ float: right;
 }
 
 #disclaimer {
-position: absolute;
-top:  300px;
-left: 300px;
-width: 30%;
-height: 250px;
-padding: 30px;
-border-style: solid;
-border-width: 2px;
+  display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 30%;
+  height: 250px;
+  padding: 15px;
+    margin: auto;
+   border-style: solid;
+   border-width: 2px;
+   overflow: auto;
 z-index: 200;
 background-color: white;
 }
 
 #maincontrol {
   display: none;
-}
-
-#tasksection {
- width: 100%;
- height: 30vh;
- text-align: center;
- overflow: auto;
+  width: 100%;
 }
 
 #tasktab {
