@@ -1,20 +1,20 @@
-//Outside JQuery namespace to allow communication to child windows
 var taskdetail=[];
 
 (function($) {
   'use strict';
-  var map;
-  var airspacePolygons = [];
-  var polygonBases = [];
-  var airspaceCircles = [];
-  var circleBases = [];
-  var markerList = [];
+ var map;
+ var airspacePolygons = [];
+ var polygonBases =[];
+ var  airspaceCircles = [];
+var circleBases = [];
+ var markerList = [];
   var tpinfo = [];
   var labelList = [];
-  var labelsShowing = false;
-  var taskdef = [];
-  var taskLine = null;
-  var airDrawOptions = {
+  var markersShowing ;
+  var taskdef=[];
+   var taskLine = null;
+   
+ var airDrawOptions = {
     strokeColor: 'black',
     strokeOpacity: 0.8,
     strokeWeight: 1,
@@ -22,26 +22,7 @@ var taskdetail=[];
     fillOpacity: 0.2,
     clickable: false
   };
-
-  function initPoints() {
-    var i;
-    for (i = 0; i < tpinfo.length; i++) {
-      markerList[i].setMap(null);
-      labelList[i].close();
-    }
-    markerList = [];
-    tpinfo = [];
-    labelList = [];
-    if (taskLine) {
-      taskLine.setMap(null);
-      taskLine = null;
-    }
-    taskdef = [];
-    $('#tasktab').html("");
-    $('#tasklength').text("");
-    $('.printbutton').prop("disabled", true);
-  }
-
+  
   function bindTaskButtons() {
     $('#tasktab button').on('click', function(event) {
       var li = $(this).parent().parent().index();
@@ -56,8 +37,8 @@ var taskdetail=[];
       updateTask();
     });
   }
-
-  function updateTask() {
+  
+   function updateTask() {
     var i;
     var newrow;
     var tpref;
@@ -80,7 +61,7 @@ var taskdetail=[];
           tpref = "TP" + i.toString();
       }
       pointref = taskdef[i];
-      newrow = "<tr><td>" + tpref + "</td><td>" + tpinfo[pointref].tpname + "</td><td>" + showpoint(tpinfo[pointref]) + "</td><td>";
+      newrow = "<tr><td>" + tpref + "</td><td>" + tpinfo[pointref].trigraph + "</td><td>" + showpoint(tpinfo[pointref]) + "</td><td>";
       if (i === 0) {
         newrow += "&nbsp;";
       } else {
@@ -89,8 +70,8 @@ var taskdetail=[];
       newrow += "</td><td><button>X</button></td></tr>";
       $('#tasktab').append(newrow);
       ptcoords = {
-        lat: tpinfo[pointref].lat,
-        lng: tpinfo[pointref].lng
+        lat: tpinfo[pointref].latitude,
+        lng: tpinfo[pointref].longitude
       };
       taskcoords.push(ptcoords);
       if (i > 0) {
@@ -118,214 +99,10 @@ var taskdetail=[];
     if (distance > 0) {
       $('#tasklength').text("Task length: " + (distance).toFixed(1) + "Km");
     }
-    bindTaskButtons();
+     bindTaskButtons();
   }
-
-  function parseTpLine(tpLine, extension) {
-    var lineout = {};
-    var latitude;
-    var longitude;
-    var matched = false;
-    var cupRegex=/^\"?([^\"]*)\"?,\"?([\w\d]*)\"?,\"?[A-Z]{0,2}\"?,\"?(\d{4}.\d{3})([NS])\"?,\"?(\d{5}.\d{3})([EW])\"?,[\w\s\d.]*,\d?,[\s\d]*,[\s\d\w\.]*,\"?[\d.]*.\"?([^"]*)\"?/; 
-    var datRegex = /^([\d]+),([\d]{2}):([\d\.]{2,})([NS]),([\d]{3}):([\d\.]{2,})([EW]),[\d\w]*,[\w]*,([^,]*),([^,]*)/;
-    switch (extension) {
-      case ".CUP":
-        var cupMatch = tpLine.match(cupRegex);
-        if (cupMatch) {
-          matched = true;
-          lineout.tpname = cupMatch[1];
-          lineout.trigraph = cupMatch[2];
-          if (lineout.trigraph.length === 0) {
-            lineout.trigraph = lineout.tpname;
-          }
-          latitude = parseFloat(cupMatch[3].substr(0, 2)) + parseFloat(cupMatch[3].substr(2, 6)) / 60;
-          if (cupMatch[4] === 'S') {
-            latitude = -latitude;
-          }
-          longitude = parseFloat(cupMatch[5].substr(0, 3)) + parseFloat(cupMatch[5].substr(3, 6)) / 60;
-          if (cupMatch[6] === 'W') {
-            longitude = -longitude;
-          }
-          lineout.detail = cupMatch[7];
-        } else {
-          matched = false;
-        }
-        break;
-      case ".DAT":
-        var datMatch = tpLine.match(datRegex);
-        var minsecs;
-        if (datMatch) {
-          matched = true;
-          lineout.tpname = datMatch[8];
-          if (/[A-Z\d]{3}/.test(lineout.title)) {
-            lineout.trigraph = lineout.title.substr(0, 3);
-          } else {
-            lineout.trigraph = lineout.tpname;
-          }
-          latitude = parseFloat(datMatch[2]);
-          if (datMatch[3].charAt(2) === '.') {
-            latitude = latitude + parseFloat(datMatch[3] / 60);
-          } else {
-            minsecs = datMatch[3].split(':');
-            latitude = latitude + parseFloat(minsecs[0] / 60) + parseFloat(minsecs[1] / 3600);
-          }
-          if (datMatch[4] === 'S') {
-            latitude = -latitude;
-          }
-          longitude = parseFloat(datMatch[5]);
-          if (datMatch[6].charAt(2) === '.') {
-            longitude = longitude + parseFloat(datMatch[6] / 60);
-          } else {
-            minsecs = datMatch[6].split(':');
-            longitude = longitude + parseFloat(minsecs[0] / 60) + parseFloat(minsecs[1] / 3600);
-          }
-          if (datMatch[7] === 'W') {
-            longitude = -longitude;
-          }
-          lineout.detail = datMatch[9];
-        } else {
-          matched = false;
-        }
-        break;
-    }
-    if (matched) {
-      lineout.latitude = latitude;
-      lineout.longitude = longitude;
-      return lineout;
-    } else {
-      return false;
-    }
-  }
-
-  function makeMarker(markerinfo) {
-    var marker = new google.maps.Marker({
-      icon: 'marker-icon.png',
-      position: {
-        lat: markerinfo.latitude,
-        lng: markerinfo.longitude
-      },
-      title: markerinfo.tpname
-    });
-    marker.index = markerinfo.index;
-    marker.addListener('click', function() {
-      taskdef.push(this.index);
-      updateTask();
-    });
-
-    return marker;
-  }
-
-  function makeLabel(labelinfo) {
-    var myOptions = {
-      content: labelinfo.trigraph,
-      boxClass: 'infoBox',
-      disableAutoPan: true,
-      pixelOffset: new google.maps.Size(-15, 0),
-      closeBoxURL: "",
-      enableEventPropagation: true
-    };
-    var ibLabel = new InfoBox(myOptions);
-    return ibLabel;
-  }
-
-  function parseTps(tpfile, extension) {
-    var bounds = new google.maps.LatLngBounds();
-    var lineIndex;
-    var tpLines = tpfile.split('\n');
-    var tpdata;
-    var marker;
-    var markerindex = 0;
-    var label = {};
-    for (lineIndex = 0; lineIndex < tpLines.length; lineIndex++) {
-      tpdata = parseTpLine(tpLines[lineIndex], extension);
-      if (tpdata) {
-        tpdata.index = markerindex;
-        tpinfo.push(tpdata);
-        marker = makeMarker(tpdata);
-        label = makeLabel(tpdata);
-        markerList.push(marker);
-        bounds.extend(marker.position);
-        labelList.push(label);
-        markerindex++;
-      }
-    }
-    return bounds;
-  }
-
-  function storePreference(name, value) {
-    if (window.localStorage) {
-      try {
-        localStorage.setItem(name, value);
-      } catch (e) {
-        // If permission is denied, ignore the error.
-      }
-    }
-  }
-
-  function zapAirspace() {
-    var i;
-    var j;
-    for (i = 0; i < airspacePolygons.length; i++) {
-      airspacePolygons[i].setMap(null);
-      airspacePolygons[i] = null;
-    }
-    airspacePolygons.length = 0;
-    polygonBases.length = 0;
-    for (j = 0; j < airspaceCircles.length; j++) {
-      airspaceCircles[j].setMap(null);
-      airspaceCircles[j] = null;
-    }
-    airspaceCircles.length = 0;
-    circleBases.length = 0;
-  }
-
-  function showAirspace() {
-    var mapbounds = map.getBounds();
-    var testvar = mapbounds.toJSON();
-    var boundsdata = JSON.stringify(testvar);
-    var i;
-    var newPolypts = [];
-    var newPolybases = [];
-    var newCircles = [];
-    var newCirclebases = [];
-    var clipalt = $('#airclip').val();
-    var j;
-    if (map.getZoom() > 7) {
-      $.post("getairspace.php", {
-          bounds: boundsdata
-        },
-        function(data, status) {
-          if (status === "success") {
-            for (i = 0; i < data.polygons.length; i++) {
-              newPolypts[i] = new google.maps.Polygon(airDrawOptions);
-              newPolypts[i].setPaths(data.polygons[i].coords);
-              newPolybases[i] = data.polygons[i].base;
-              if (newPolybases[i] < clipalt) {
-                newPolypts[i].setMap(map);
-              }
-            }
-            for (j = 0; j < data.circles.length; j++) {
-              newCircles[j] = new google.maps.Circle(airDrawOptions);
-              newCircles[j].setRadius(1000 * data.circles[j].radius);
-              newCircles[j].setCenter(data.circles[j].centre);
-              newCirclebases[j] = data.circles[j].base;
-              if (newCirclebases[j] < clipalt) {
-                newCircles[j].setMap(map);
-              }
-            }
-            zapAirspace();
-            airspacePolygons = newPolypts;
-            polygonBases = newPolybases;
-            airspaceCircles = newCircles;
-            circleBases = newCirclebases;
-          }
-        }, "json");
-    } else {
-      zapAirspace();
-    }
-  }
-
-  function changeBase() {
+  
+   function changeBase() {
     var clipalt = $('#airclip').val();
     var i;
     var j;
@@ -344,42 +121,118 @@ var taskdetail=[];
       }
     }
   }
-
-  function showLabels() {
-    var mapbounds = map.getBounds();
-    var i;
-    var j;
-    var labelShowlist = [];
-    var showing = true;
-    for (i = 0; i < markerList.length; i++) {
-      if (mapbounds.contains(markerList[i].getPosition())) {
-        labelShowlist.push(i);
-      } else {
-        labelList[i].close();
+  
+   function storePreference(name, value) {
+    if (window.localStorage) {
+      try {
+        localStorage.setItem(name, value);
+      } catch (e) {
+        // If permission is denied, ignore the error.
       }
     }
-    var showing = (labelShowlist.length < 400);
-    for (j = 0; j < labelShowlist.length; j++) {
-      if (showing) {
-        labelList[labelShowlist[j]].open(map, markerList[labelShowlist[j]]);
-      } else {
-        labelList[labelShowlist[j]].close();
+  }
+  
+  function makeLabel(labelinfo,offset) {
+    var myOptions = {
+      content: labelinfo,
+      boxClass: 'infoBox',
+      disableAutoPan: true,
+      pixelOffset: offset,
+      closeBoxURL: "",
+     visible : true,
+      enableEventPropagation: true
+    };
+    var ibLabel = new InfoBox(myOptions);
+    return ibLabel;
+  }
+  
+  function maketps() {
+      var i;
+      var marker;
+      var label;
+      var labelOffset=new google.maps.Size(-15, 0);
+      for(i=0;i < tpinfo.length; i++) {
+          marker=new google.maps.Marker({
+          icon: 'marker-icon.png',
+          position: {
+          lat: tpinfo[i].latitude,
+          lng: tpinfo[i].longitude
+      },
+         title: tpinfo[i].tpname
+      });
+        marker.index = i;
+        marker.addListener('click', function() {
+      taskdef.push(this.index);
+     updateTask();
+    });
+       marker.setMap(map);
+       markerList.push(marker);
+       markersShowing=true;
+       label=makeLabel(tpinfo[i].trigraph,labelOffset);
+      labelList.push(label);
       }
+  }
+  
+  function getPoints() {
+      $.getJSON("getpoints.php", function(data) {
+          tpinfo=data;
+          maketps();
+      });
+  }
+  
+ function getAirspace() {
+    var i;
+    var newPolypts = [];
+    var newPolybases = [];
+    var newCircles = [];
+    var newCirclebases = [];
+    var clipalt = $('#airclip').val();
+    var j;
+     $.post("getairspace.php", {
+          country: "uk"
+        },
+        function(data, status) {
+          if (status === "success") {
+            for (i = 0; i < data.polygons.length; i++) {
+              airspacePolygons[i] = new google.maps.Polygon(airDrawOptions);
+              airspacePolygons[i].setPaths(data.polygons[i].coords);
+              polygonBases[i] = data.polygons[i].base;
+            }
+            for (j = 0; j < data.circles.length; j++) {
+              airspaceCircles[j] = new google.maps.Circle(airDrawOptions);
+              airspaceCircles[j].setRadius(1000 * data.circles[j].radius);
+              airspaceCircles[j].setCenter(data.circles[j].centre);
+              circleBases[j] = data.circles[j].base;
+            }
+            changeBase();
+          }
+        }, "json");
+ }
+ 
+ function showLabels() {
+    var i;
+    if(!(markersShowing)) {
+        showMarkers();
+        $('input:radio[name=wpt_vis]')[0].checked = true;
+    }
+    for (i = 0; i < markerList.length; i++) {
+        labelList[i].open(map, markerList[i]);
     }
   }
 
   function hideLabels() {
     var i;
     for (i = 0; i < markerList.length; i++) {
-      labelList[i].close();
+         labelList[i].close();
     }
   }
-
-  function showMarkers() {
+ 
+ function showMarkers() {
     var i;
     for (i = 0; i < markerList.length; i++) {
       markerList[i].setMap(map);
     }
+    markersShowing=true;
   }
 
   function hideMarkers() {
@@ -387,17 +240,7 @@ var taskdetail=[];
     for (i = 0; i < markerList.length; i++) {
       markerList[i].setMap(null);
     }
-  }
-
-  function kickitoff(mapbounds) {
-    map.setOptions({
-      maxZoom: 18
-    });
-    map.fitBounds(mapbounds);
-    map.setZoom(9);
-    $('input:radio[name=wpt_vis]')[0].checked = true;
-    $('input:radio[name=label_vis]')[1].checked = true;
-    showMarkers();
+    markersShowing=false;
   }
 
   function exportTask(url) {
@@ -408,82 +251,52 @@ var taskdetail=[];
     }
     window.open(url, "_blank");
   }
-
-  $(document).ready(function() {
+ 
+ $(document).ready(function() {
     var mapOpt = {
-      center: new google.maps.LatLng(0, 0),
-      zoom: 2,
-      maxZoom: 2,
+      center: new google.maps.LatLng(53.5, -1),
+      zoom: 7,
+      maxZoom: 18,
       streetViewControl: false
     };
     map = new google.maps.Map($('#map').get(0), mapOpt);
-    $(' input[name=wpt_vis]:radio').change(function() {
+    
+     $('#airclip').change(function() {
+      var clipping = $(this).val();
+     storePreference("airspaceClip", clipping);
+      changeBase();
+    });
+
+$(' input[name=wpt_vis]:radio').change(function() {
       if ($(this).val() === 'show') {
         showMarkers();
       } else {
         hideMarkers();
+        hideLabels();
+        $('input:radio[name=label_vis]')[1].checked = true;
       }
     });
-
-    $(' input[name=label_vis]:radio').change(function() {
+     
+$(' input[name=label_vis]:radio').change(function() {
       if ($(this).val() === 'show') {
         showLabels();
-        labelsShowing = true;
       } else {
         hideLabels();
-        labelsShowing = false;
       }
     });
 
-    $('#help').click(function () {
-            window.open("taskplanhelp.html", "_blank");
-        });
-
-    $('#about').click(function () {
-            window.open("taskplanabout.html", "_blank");
-        });
-    
-    $('#fileControl').change(function() {
-      var filetypes = [".CUP", ".DAT"];
-      var mapbounds;
-      if (this.files.length > 0) {
-        var extension = this.value.substr(-4).toUpperCase();
-        if (filetypes.indexOf(extension) >= 0) {
-          initPoints();
-          var reader = new FileReader();
-          reader.onload = function(e) {
-            mapbounds = parseTps(this.result, extension);
-            if (markerList.length > 1) {
-              $('#maincontrol').show();
-              kickitoff(mapbounds);
-            } else {
-              alert("Sorry, file type incorrect");
-            }
-          };
-          reader.readAsText(this.files[0]);
-        }
-      }
-    });
-
-    $('#airclip').change(function() {
-      var clipping = $(this).val();
-      storePreference("airspaceClip", clipping);
-      changeBase();
-    });
-
-    $('#acceptor').click(function() {
+$('#acceptor').click(function() {
       $('#disclaimer').hide();
-      $('#fileselect').show();
-    });
+     getAirspace();
+      getPoints();
+    $('input:radio[name=wpt_vis]')[0].checked = true;
+    $('input:radio[name=label_vis]')[1].checked = true;
+    $('#maincontrol').show();
+    }); 
 
-    map.addListener('idle', function() {
-      showAirspace();
-      if (labelsShowing) {
-        showLabels();
-      }
-    });
 
-    $('#tasksheet').click(function() {
+
+  $('#tasksheet').click(function() {
       exportTask("taskbrief.html");
     });
 
@@ -491,7 +304,7 @@ var taskdetail=[];
       exportTask("declaration.html");
     });
 
-    var airspaceClip = '';
+ var airspaceClip = '';
     if (window.localStorage) {
       try {
         airspaceClip = localStorage.getItem("airspaceClip");
@@ -502,5 +315,5 @@ var taskdetail=[];
         // If permission is denied, ignore the error.
       }
     }
-  });
+ });
 }(jQuery));

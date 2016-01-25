@@ -1,14 +1,8 @@
 <?php
-$countries=[];
 require_once("../db_inc.php");
 $mysqli=new mysqli($dbserver,$username,$password,$database);
-$bounds=json_decode($_POST['bounds'],true);
-$bounds=json_decode($_POST['bounds'],true);
-$box="POLYGON((".$bounds['north']." ".$bounds['west'].",".$bounds['north']." ".$bounds['east'].",".$bounds['south']." ".$bounds['east'].",".$bounds['south']." ".$bounds['west'].",".$bounds['north']." ".$bounds['west']."))";
-$sql="SET @bbox=GeomFromText('".$box."')";
-$mysqli->query($sql);
 echo  "{\n\"polygons\": [";
-$result = $mysqli->query("SELECT base,AsText(outline) FROM geopoly WHERE INTERSECTS(outline,@bbox)");
+$result = $mysqli->query("SELECT base,AsText(outline) FROM geopoly WHERE country='uk'");
 $started= false;
 if($result->num_rows !==0) {
    while($polyinfo=$result->fetch_row()) {
@@ -24,7 +18,7 @@ if($result->num_rows !==0) {
 $result->close();
 echo "],\n";
 echo "\"circles\": [\n";
-$circledata = $mysqli->query("SELECT base,AsText(centre),radius FROM geocircle WHERE INTERSECTS(mbr,@bbox)");
+$circledata = $mysqli->query("SELECT base,AsText(centre),radius FROM geocircle WHERE country='uk'");
 if($circledata->num_rows !==0)  {
     $circlestarted=false;
     while($circleinfo=$circledata->fetch_row())  {
