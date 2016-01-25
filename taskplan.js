@@ -80,7 +80,7 @@ var taskdetail=[];
           tpref = "TP" + i.toString();
       }
       pointref = taskdef[i];
-      newrow = "<tr><td>" + tpref + "</td><td>" + tpinfo[pointref].title + "</td><td>" + showpoint(tpinfo[pointref]) + "</td><td>";
+      newrow = "<tr><td>" + tpref + "</td><td>" + tpinfo[pointref].tpname + "</td><td>" + showpoint(tpinfo[pointref]) + "</td><td>";
       if (i === 0) {
         newrow += "&nbsp;";
       } else {
@@ -133,10 +133,10 @@ var taskdetail=[];
         var cupMatch = tpLine.match(cupRegex);
         if (cupMatch) {
           matched = true;
-          lineout.title = cupMatch[1];
-          lineout.labelContent = cupMatch[2];
-          if (lineout.labelContent.length === 0) {
-            lineout.labelContent = lineout.title;
+          lineout.tpname = cupMatch[1];
+          lineout.trigraph = cupMatch[2];
+          if (lineout.trigraph.length === 0) {
+            lineout.trigraph = lineout.tpname;
           }
           latitude = parseFloat(cupMatch[3].substr(0, 2)) + parseFloat(cupMatch[3].substr(2, 6)) / 60;
           if (cupMatch[4] === 'S') {
@@ -156,11 +156,11 @@ var taskdetail=[];
         var minsecs;
         if (datMatch) {
           matched = true;
-          lineout.title = datMatch[8];
+          lineout.tpname = datMatch[8];
           if (/[A-Z\d]{3}/.test(lineout.title)) {
-            lineout.labelContent = lineout.title.substr(0, 3);
+            lineout.trigraph = lineout.title.substr(0, 3);
           } else {
-            lineout.labelContent = lineout.title;
+            lineout.trigraph = lineout.tpname;
           }
           latitude = parseFloat(datMatch[2]);
           if (datMatch[3].charAt(2) === '.') {
@@ -189,8 +189,8 @@ var taskdetail=[];
         break;
     }
     if (matched) {
-      lineout.lat = latitude;
-      lineout.lng = longitude;
+      lineout.latitude = latitude;
+      lineout.longitude = longitude;
       return lineout;
     } else {
       return false;
@@ -201,10 +201,10 @@ var taskdetail=[];
     var marker = new google.maps.Marker({
       icon: 'marker-icon.png',
       position: {
-        lat: markerinfo.lat,
-        lng: markerinfo.lng
+        lat: markerinfo.latitude,
+        lng: markerinfo.longitude
       },
-      title: markerinfo.title
+      title: markerinfo.tpname
     });
     marker.index = markerinfo.index;
     marker.addListener('click', function() {
@@ -217,12 +217,11 @@ var taskdetail=[];
 
   function makeLabel(labelinfo) {
     var myOptions = {
-      content: labelinfo.labelContent,
+      content: labelinfo.trigraph,
       boxClass: 'infoBox',
       disableAutoPan: true,
       pixelOffset: new google.maps.Size(-15, 0),
       closeBoxURL: "",
-      isHidden: false,
       enableEventPropagation: true
     };
     var ibLabel = new InfoBox(myOptions);

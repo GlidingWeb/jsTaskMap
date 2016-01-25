@@ -15,7 +15,7 @@
             default: 
                 tpref="Waypoint " + i.toString();
         }
-        row= "<tr><th>"  + tpref + ":</th><td>"+ task[i].title + "</td><td>"+showpoint(task[i]) + "</td></tr>";
+        row= "<tr><th>"  + tpref + ":</th><td>"+ task[i].tpname + "</td><td>"+showpoint(task[i]) + "</td></tr>";
         $('#route').append(row);
    }
  }
