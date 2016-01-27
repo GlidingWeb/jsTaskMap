@@ -1,3 +1,9 @@
+<?php
+$version=strtolower($_GET['version']);
+if(empty($version)) {
+header('Location: index.html');
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,14 +13,32 @@
 <script src="lib/infobox.js"></script>
 <script src="lib/jquery-2.1.3.min.js"></script>
 <script  src="geocalc.js"></script>
-<script  src="taskplan.js"></script>
-<link rel="stylesheet" href="taskplan.css" />
+<?php
+switch ($version) {
+case 'world':
+  echo "<script  src='xcplan_world.js'></script>\n";
+  break;
+case 'uk':
+   echo "<script  src='xcplan_uk.js'></script>\n";
+  break;
+default:
+    echo "<script  src='xcplan_world.js'></script>\n";
+}
+?>
+<script  src="xcplan.js"></script>
+<link rel="stylesheet" href="xcplan.css" />
 </head>
 <body>
 <div id='titlediv'>
     <button id='help'>Help</button>
     <button id='about'>About</button>
-<h1>XCWebPlan</h1>
+<h1>XCWebPlan
+<?php
+if($version==='uk') {
+echo "- UK version";
+}
+?>
+</h1>
     <p>
         A free browser-based tool for planning soaring tasks.
     </p>
@@ -41,6 +65,13 @@
         </select>
         feet
     </p>
+    <?php
+    if($version==='world') {
+   echo " <p id='fileselect'>\n";
+    echo "<label for='fileControl'>Select a turning point file:</label>\n";
+    echo " <input id='fileControl' type='file' accept='.cup,.dat' />\n</p>\n";
+    }
+    ?>
   <div id="maincontrol">
     <p>Show waypoints: <input type="radio" name="wpt_vis" value="show" />&nbsp; &nbsp;  Hide waypoints:  <input type="radio" name="wpt_vis" value="hide" />
   </p>

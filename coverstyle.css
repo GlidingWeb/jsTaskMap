@@ -1,0 +1,66 @@
+* 	{ 
+	margin: 0;
+	padding: 0;
+}
+
+body 	{ 
+	font-style: normal;
+	font-family: Tahoma, Geneva, sans-serif;
+	background: #C0F9F9;
+	color: #404040;
+	padding: 0;
+	margin: 0;
+	background-image: url(clouds.jpg);
+	background-repeat: no-repeat;
+}
+
+div.content     {
+		width: 960px;
+		margin: auto;
+                padding: 20px;
+                position: relative;
+                top: 30px;
+		font-family: Tahoma, Geneva, sans-serif;
+		background: #F9F9F9;
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+                border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+}
+
+h1	{
+	font-size: 2.0em;
+	color: #808080;
+        text-align: center;
+	}
+	
+h2	{
+	font-size: 1.5em;
+	color: #A0A0A0;
+        text-align: center;
+        padding: 1em;
+	}
+
+p, li	{
+	font-size: 0.9em;
+	margin-top: 0em;
+	margin-bottom: 1.5em;
+        text-align: justify;
+}
+
+ul	{
+	margin-top: 0em;
+        list-style-position: inside;
+}
+
+li   {
+    margin-bottom: 1.0em;
+}
+
+@media print, screen and (max-width: 980px) {
+    div.content  {
+        width: 85%;
+        display: block;
+        position: relative;
+    }
+}

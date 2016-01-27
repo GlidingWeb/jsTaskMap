@@ -1,0 +1,108 @@
+body {
+   font-style: normal;
+	font-family: Tahoma, Geneva, sans-serif;
+	background: #F9F9F9;
+	color: #404040;
+        font-size: 0.8em;
+}
+
+#maincontainer {
+    display: table;
+    border-collapse:collapse;
+    width:  100%;
+}
+
+ #help, #about {
+  position: absolute;
+  top:10px;
+  font-weight: bold;
+  }
+
+  #about {
+  right: 10px;
+  }
+
+h1  {
+    text-align: center;
+}
+
+#titlediv  {
+    height: 8em;
+}
+
+#titlediv  p  {
+   text-align: center;
+}
+
+#map {
+    width: 65%;
+    display: table-cell;
+    height:  calc(100vh - 12em);
+}
+
+#controldiv {
+display: table-cell;
+padding-left: 15px;
+}
+
+#fileselect {
+display: none;
+}
+
+#acceptor {
+float: right;
+}
+
+#disclaimer {
+  display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 30%;
+  height: 250px;
+  padding: 15px;
+    margin: auto;
+   border-style: solid;
+   border-width: 2px;
+   overflow: auto;
+z-index: 200;
+background-color: white;
+}
+
+#maincontrol {
+  display: none;
+  width: 100%;
+}
+
+#tasktab {
+width: 100%;
+}
+
+#tasktab td {
+padding-left: 5px;
+padding-right: 5px;
+}
+
+#tasktab  button {
+    width: 15px;
+    padding: 0px;
+}
+
+#tasksheet, #declaration {
+margin-left:  30px;
+}
+   
+.infoBox {
+      border:  1px solid black;
+		  text-align:  center;
+		  font-size: 8pt;
+                   background-color: #FFFFFF;
+                    padding-left: 3px;
+                  padding-right: 3px;
+                  white-space: nowrap;
+                 opacity: 0.8;
+                 z-index: 200;
+}
+   
