@@ -50,7 +50,9 @@ echo "- UK version";
         </p>
     </noscript>
 <div id="maincontainer">
+<div id="mapwrapper">
 <div id="map"></div>
+</div>
  <div id="controldiv">
    <p>
    <label for="airclip">Clip airspace above:</label>
@@ -89,7 +91,6 @@ echo "- UK version";
  <h4>Print:</h4>
  <button id="tasksheet" class="printbutton" disabled>Task Briefing</button><button id="declaration" class="printbutton" disabled>Declaration</button>
     </div>
-   </div>
    </div>
   
   <div id='disclaimer'>

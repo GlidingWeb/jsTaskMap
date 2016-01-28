@@ -8,7 +8,6 @@ body {
 
 #maincontainer {
     display: table;
-    border-collapse:collapse;
     width:  100%;
 }
 
@@ -34,15 +33,21 @@ h1  {
    text-align: center;
 }
 
-#map {
+#mapwrapper  {
     width: 65%;
     display: table-cell;
     height:  calc(100vh - 12em);
 }
 
+#map {
+height: 100%;
+width: 100%;
+}
+
 #controldiv {
 display: table-cell;
 padding-left: 15px;
+vertical-align: top;
 }
 
 #fileselect {
