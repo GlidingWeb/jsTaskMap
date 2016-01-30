@@ -18,6 +18,7 @@
     $('.printbutton').prop("disabled", true);
   }
   
+  /*
   function showLabels() {
     var mapbounds = map.getBounds();
     var i;
@@ -40,6 +41,8 @@
       }
     }
   }
+  
+  */
   
   function zapAirspace() {
     var i;

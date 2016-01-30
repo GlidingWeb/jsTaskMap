@@ -21,7 +21,30 @@
     clickable: false
   };
 
-    function bindTaskButtons() {
+  function showLabels() {
+    var mapbounds = map.getBounds();
+    var i;
+    var j;
+    var labelShowlist = [];
+    var showing = true;
+    for (i = 0; i < markerList.length; i++) {
+      if (mapbounds.contains(markerList[i].getPosition())) {
+        labelShowlist.push(i);
+      } else {
+        labelList[i].close();
+      }
+    }
+    var showing = (labelShowlist.length < 400);
+    for (j = 0; j < labelShowlist.length; j++) {
+      if (showing) {
+        labelList[labelShowlist[j]].open(map, markerList[labelShowlist[j]]);
+      } else {
+        labelList[labelShowlist[j]].close();
+      }
+    }
+  }
+ 
+   function bindTaskButtons() {
     $('#tasktab button').on('click', function(event) {
       var li = $(this).parent().parent().index();
       if ($(this).text() === "X") {

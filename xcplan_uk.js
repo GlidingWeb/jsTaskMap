@@ -7,17 +7,6 @@
    });
  }
 
- function showLabels() {
-   var i;
-   if (!(markersShowing)) {
-     showMarkers();
-     $('input:radio[name=wpt_vis]')[0].checked = true;
-   }
-   for (i = 0; i < markerList.length; i++) {
-     labelList[i].open(map, markerList[i]);
-   }
- }
-
  function getAirspace() {
    var i;
    var newPolypts = [];
@@ -70,11 +59,18 @@
      styles: myStyles
    };
    map = new google.maps.Map($('#map').get(0), mapOpt);
-
+   
+      map.addListener('idle', function() {
+      if (labelsShowing) {
+        showLabels();
+      }
+    });
+   
    $('#acceptor').click(function() {
      $('#disclaimer').hide();
      getAirspace();
      getPoints();
+     $('.printbutton').prop("disabled", true);
      $('#maincontrol').show();
    });
 
