@@ -42,7 +42,7 @@ echo "- UK version";
     <p>
         A free browser-based tool for planning soaring tasks.
     </p>
-      <p> &copy; 2016 Alistair Malcolm Green and Richard Brisbourne </p>
+      <p> &copy; 2016 Richard Brisbourne </p>
 </div>
 <noscript>
         <p>

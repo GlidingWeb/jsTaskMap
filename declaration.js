@@ -21,7 +21,7 @@
  }
  
  $(document).ready(function () {
-$('#datepick').dcalendarpicker({format:'w dd mmmm yyyy'});
+$('#datepick').dcalendarpicker({format:'w dd mmm yyyy'});
 showroute(window.opener.taskdetail);
 $("#printme").click(function(){
      window.print();

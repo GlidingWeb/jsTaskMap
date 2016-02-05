@@ -36,7 +36,7 @@
 
    $(document).ready(function() {
      $('#datepick').dcalendarpicker({
-       format: 'w dd mmmm yyyy'
+       format: 'w dd mmm yyyy'
      });
      showtask(window.opener.taskdetail);
      $("#printme").click(function() {

@@ -40,6 +40,7 @@ text-align: right;
 #warningbox  {
    width: 85%;
    margin: auto;
+   -ms-overflow-style: none;
 }
 
 }
@@ -97,6 +98,7 @@ textarea  {
     width: 100%;
     margin: auto;
     height: 10em;
+    -ms-overflow-style: none;
 }
 
 

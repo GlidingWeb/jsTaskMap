@@ -72,7 +72,7 @@
     var newCirclebases = [];
     var clipalt = $('#airclip').val();
     var j;
-    if (map.getZoom() > 7) {
+    if (map.getZoom() > 6) {
       $.post("getairspace.php", {
           bounds: boundsdata
         },
