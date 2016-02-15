@@ -7,7 +7,7 @@
     var lngdegrees = Math.abs(point.longitude);
     var lngdegreepart = Math.floor(lngdegrees);
     var lngminutepart = 60 * (lngdegrees - lngdegreepart);
-    var lngdir = (point.lng > 0) ? "E" : "W";
+    var lngdir = (point.longitude > 0) ? "E" : "W";
     var retstr = latdegreepart.toString() + "&deg;" + latminutepart.toFixed(3) + "&prime;" + latdir + " " + lngdegreepart.toString() + "&deg;" + lngminutepart.toFixed(3) + "&prime;" + lngdir;
     return retstr;
   }
