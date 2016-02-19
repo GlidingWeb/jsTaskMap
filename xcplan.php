@@ -90,9 +90,18 @@ echo "- UK version";
  <hr />
  <h4>Print:</h4>
  <button id="tasksheet" class="printbutton" disabled>Task Briefing</button><button id="declaration" class="printbutton" disabled>Declaration</button>
+ <?php
+   if($version==='world') {
+   echo "<hr>";
+   echo "<div id='exportdiv'>";
+  echo "<h4>Export:</h4>";
+ echo "<button id='copytask' class='printbutton' disabled>Copy task</button> to IGCWebview";
+ echo "</div>";
+ }
+ ?>
     </div>
    </div>
-  
+   
   <div id='disclaimer'>
        <p>
     <b>Warning:</b> Unless the "no airspace" option is selected opposite, outlines of controlled airspace  will be displayed on the map provided we have data for the area.</p>

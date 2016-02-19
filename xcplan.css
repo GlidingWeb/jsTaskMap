@@ -98,6 +98,10 @@ padding-right: 5px;
 #tasksheet, #declaration {
 margin-left:  30px;
 }
+
+#exportdiv {
+display: none;
+}
    
 .infoBox {
       border:  1px solid black;

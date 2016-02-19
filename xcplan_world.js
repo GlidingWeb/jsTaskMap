@@ -1,4 +1,4 @@
-  'use strict';
+
   function initPoints() {
     var i;
     for (i = 0; i < tpinfo.length; i++) {
@@ -17,33 +17,7 @@
     $('#tasklength').text("");
     $('.printbutton').prop("disabled", true);
   }
-  
-  /*
-  function showLabels() {
-    var mapbounds = map.getBounds();
-    var i;
-    var j;
-    var labelShowlist = [];
-    var showing = true;
-    for (i = 0; i < markerList.length; i++) {
-      if (mapbounds.contains(markerList[i].getPosition())) {
-        labelShowlist.push(i);
-      } else {
-        labelList[i].close();
-      }
-    }
-    var showing = (labelShowlist.length < 400);
-    for (j = 0; j < labelShowlist.length; j++) {
-      if (showing) {
-        labelList[labelShowlist[j]].open(map, markerList[labelShowlist[j]]);
-      } else {
-        labelList[labelShowlist[j]].close();
-      }
-    }
-  }
-  
-  */
-  
+   
   function zapAirspace() {
     var i;
     var j;
@@ -262,6 +236,28 @@
             window.open("xcplanabout.html", "_blank");
         });
     
+     $('#copytask').click(function() {
+    var i;
+    var exportDetail={
+        tpname: [],
+        lat: [],
+        lng: []
+    };
+
+if(window.opener && !window.opener.closed && (window.opener.name==='igcview') ) {
+   for (i = 0; i < taskdef.length; i++) {
+      exportDetail.tpname[i]=tpinfo[taskdef[i]].tpname;
+     exportDetail.lat[i]=tpinfo[taskdef[i]].latitude;
+     exportDetail.lng[i]=tpinfo[taskdef[i]].longitude;
+    }
+    var retval= window.opener.ns.importTask(exportDetail);
+     alert(retval);
+}
+else {
+    alert("Copy operation failed");
+}
+});
+    
     $('#fileControl').change(function() {
       var filetypes = [".CUP", ".DAT"];
       var mapbounds;
@@ -274,6 +270,9 @@
             mapbounds = parseTps(this.result, extension);
             if (tpinfo.length  > 1) {
               $('#maincontrol').show();
+    if(window.opener.name==='igcview')  {
+            $('#exportdiv').show();
+       }
                map.setOptions({
                  maxZoom: 18
                  });
