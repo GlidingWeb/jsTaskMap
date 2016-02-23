@@ -270,9 +270,11 @@ else {
             mapbounds = parseTps(this.result, extension);
             if (tpinfo.length  > 1) {
               $('#maincontrol').show();
-    if(window.opener.name==='igcview')  {
-            $('#exportdiv').show();
-       }
+        if(window.opener) {
+            if(window.opener.name==='igcview') {
+             $('#exportdiv').show();
+            }
+           }
                map.setOptions({
                  maxZoom: 18
                  });
