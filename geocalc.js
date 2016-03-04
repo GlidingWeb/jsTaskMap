@@ -3,7 +3,7 @@
     var latdegrees = Math.abs(point.latitude);
     var latdegreepart = Math.floor(latdegrees);
     var latminutepart = 60 * (latdegrees - latdegreepart);
-    var latdir = (point.lat > 0) ? "N" : "S";
+    var latdir = (point.latitude > 0) ? "N" : "S";
     var lngdegrees = Math.abs(point.longitude);
     var lngdegreepart = Math.floor(lngdegrees);
     var lngminutepart = 60 * (lngdegrees - lngdegreepart);
