@@ -161,6 +161,10 @@
     var lineIndex;
     var tpLines = tpfile.split('\n');
     var tpdata;
+    var cumulator= {
+        lat: 0,
+        lng: 0
+    };
     var maxLat=-90;
     var minLat= 90;
     var maxLng=-180;
@@ -170,24 +174,12 @@
       tpdata = parseTpLine(tpLines[lineIndex], extension);
       if (tpdata) {
         tpinfo.push(tpdata);
-        if(tpdata.latitude > maxLat) {
-            maxLat=tpdata.latitude;
-        }
-        if(tpdata.latitude < minLat) {
-            minLat=tpdata.latitude;
-        }
-         if(tpdata.longitude > maxLng) {
-            maxLng=tpdata.longitude;
-        }
-        if(tpdata.longitude < minLng) {
-            minLng=tpdata.longitude;
-        }
+         cumulator.lat+=tpdata.latitude;
+        cumulator.lng+=tpdata.longitude;
       }
     }
-           var southWest = new google.maps.LatLng(minLat,minLng);
-           var northEast = new google.maps.LatLng(maxLat,maxLng);
-          var bounds = new google.maps.LatLngBounds(southWest,northEast);
-          return bounds;
+      var fileCentre=new google.maps.LatLng(cumulator.lat/tpinfo.length,cumulator.lng/tpinfo.length);
+      return  fileCentre
   }
   
  $(document).ready(function() {
@@ -244,7 +236,7 @@
         lng: []
     };
 
-if(window.opener && !window.opener.closed && (window.opener.name==='igcview') ) {
+if(window.opener && !window.opener.closed && (window.opener.name==='igcview'))  {
    for (i = 0; i < taskdef.length; i++) {
       exportDetail.tpname[i]=tpinfo[taskdef[i]].tpname;
      exportDetail.lat[i]=tpinfo[taskdef[i]].latitude;
@@ -260,14 +252,13 @@ else {
     
     $('#fileControl').change(function() {
       var filetypes = [".CUP", ".DAT"];
-      var mapbounds;
       if (this.files.length > 0) {
         var extension = this.value.substr(-4).toUpperCase();
         if (filetypes.indexOf(extension) >= 0) {
            initPoints();
           var reader = new FileReader();
           reader.onload = function(e) {
-            mapbounds = parseTps(this.result, extension);
+            var midpoint = parseTps(this.result, extension);
             if (tpinfo.length  > 1) {
               $('#maincontrol').show();
         if(window.opener) {
@@ -278,7 +269,7 @@ else {
                map.setOptions({
                  maxZoom: 18
                  });
-              map.fitBounds(mapbounds);
+                map.panTo(midpoint);
                map.setZoom(9);
                maketps();
             } else {
