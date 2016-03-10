@@ -1,4 +1,44 @@
 
+function getAirspace(filedata) {
+      var country='xx';
+      zapAirspace();
+       $.ajax({
+       url: "geolocate.php",
+      data: {
+        lat: filedata.latitude,
+        lng: filedata.longitude
+      },
+      timeout: 3000,
+      method: "POST",
+      dataType: "text",
+      success: function(data) {
+          country=data;
+      },
+      complete: function() {
+     $.post("localairspace.php", {
+       country: country
+     },
+     function(data, status) {
+         
+       if (status === "success") {
+         for (i = 0; i < data.polygons.length; i++) {
+           airspacePolygons[i] = new google.maps.Polygon(airDrawOptions);
+           airspacePolygons[i].setPaths(data.polygons[i].coords);
+           polygonBases[i] = data.polygons[i].base;
+         }
+         for (j = 0; j < data.circles.length; j++) {
+           airspaceCircles[j] = new google.maps.Circle(airDrawOptions);
+           airspaceCircles[j].setRadius(1000 * data.circles[j].radius);
+           airspaceCircles[j].setCenter(data.circles[j].centre);
+           circleBases[j] = data.circles[j].base;
+         }
+         changeBase();
+       }
+            }, "json");
+      }
+    });
+}
+
   function initPoints() {
     var i;
     for (i = 0; i < tpinfo.length; i++) {
@@ -33,52 +73,6 @@
     }
     airspaceCircles.length = 0;
     circleBases.length = 0;
-  }
-
-  function showAirspace() {
-    var mapbounds = map.getBounds();
-    var testvar = mapbounds.toJSON();
-    var boundsdata = JSON.stringify(testvar);
-    var i;
-    var newPolypts = [];
-    var newPolybases = [];
-    var newCircles = [];
-    var newCirclebases = [];
-    var clipalt = $('#airclip').val();
-    var j;
-    if (map.getZoom() > 6) {
-      $.post("getairspace.php", {
-          bounds: boundsdata
-        },
-        function(data, status) {
-          if (status === "success") {
-            for (i = 0; i < data.polygons.length; i++) {
-              newPolypts[i] = new google.maps.Polygon(airDrawOptions);
-              newPolypts[i].setPaths(data.polygons[i].coords);
-              newPolybases[i] = data.polygons[i].base;
-              if (newPolybases[i] < clipalt) {
-                newPolypts[i].setMap(map);
-              }
-            }
-            for (j = 0; j < data.circles.length; j++) {
-              newCircles[j] = new google.maps.Circle(airDrawOptions);
-              newCircles[j].setRadius(1000 * data.circles[j].radius);
-              newCircles[j].setCenter(data.circles[j].centre);
-              newCirclebases[j] = data.circles[j].base;
-              if (newCirclebases[j] < clipalt) {
-                newCircles[j].setMap(map);
-              }
-            }
-            zapAirspace();
-            airspacePolygons = newPolypts;
-            polygonBases = newPolybases;
-            airspaceCircles = newCircles;
-            circleBases = newCirclebases;
-          }
-        }, "json");
-    } else {
-      zapAirspace();
-    }
   }
   
    function parseTpLine(tpLine, extension) {
@@ -169,18 +163,19 @@
     var minLat= 90;
     var maxLng=-180;
     var minLng=180;
-
+    
     for (lineIndex = 0; lineIndex < tpLines.length; lineIndex++) {
       tpdata = parseTpLine(tpLines[lineIndex], extension);
       if (tpdata) {
         tpinfo.push(tpdata);
-         cumulator.lat+=tpdata.latitude;
+        cumulator.lat+=tpdata.latitude;
         cumulator.lng+=tpdata.longitude;
       }
     }
-      var fileCentre=new google.maps.LatLng(cumulator.lat/tpinfo.length,cumulator.lng/tpinfo.length);
-      return  fileCentre
+          var fileCentre=new google.maps.LatLng(cumulator.lat/tpinfo.length,cumulator.lng/tpinfo.length);
+          return fileCentre;
   }
+  
   
  $(document).ready(function() {
      
@@ -214,12 +209,11 @@
     });
 
     map.addListener('idle', function() {
-      showAirspace();
       if (labelsShowing) {
         showLabels();
       }
     });
-  
+      
      $('#help').click(function () {
             window.open("xcplanhelp.html", "_blank");
         });
@@ -236,7 +230,7 @@
         lng: []
     };
 
-if(window.opener && !window.opener.closed && (window.opener.name==='igcview'))  {
+if(window.opener && !window.opener.closed && ((window.opener.name==='igcview') || (window.opener.name==='flarmwrite')) ) {
    for (i = 0; i < taskdef.length; i++) {
       exportDetail.tpname[i]=tpinfo[taskdef[i]].tpname;
      exportDetail.lat[i]=tpinfo[taskdef[i]].latitude;
@@ -258,11 +252,11 @@ else {
            initPoints();
           var reader = new FileReader();
           reader.onload = function(e) {
-            var midpoint = parseTps(this.result, extension);
+            var midpoint= parseTps(this.result, extension);
             if (tpinfo.length  > 1) {
               $('#maincontrol').show();
         if(window.opener) {
-            if(window.opener.name==='igcview') {
+            if((window.opener.name==='igcview')  || (window.opener.name==='flarmwrite')) {
              $('#exportdiv').show();
             }
            }
@@ -270,6 +264,7 @@ else {
                  maxZoom: 18
                  });
                 map.panTo(midpoint);
+               getAirspace(tpinfo[0]);
                map.setZoom(9);
                maketps();
             } else {
