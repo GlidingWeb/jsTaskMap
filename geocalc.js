@@ -1,4 +1,5 @@
- 
+'use strict';
+
   function showpoint(point) {
     var latdegrees = Math.abs(point.latitude);
     var latdegreepart = Math.floor(latdegrees);

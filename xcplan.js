@@ -1,4 +1,4 @@
-  'use strict';
+
   var taskdetail=[];
   var map;
   var airspacePolygons = [];
@@ -141,7 +141,6 @@
       var marker;
       var label;
       var labelOffset=new google.maps.Size(-15, 0);
-     // document.write(JSON.stringify(tpinfo));
       for(i=0;i < tpinfo.length; i++) {
           marker=new google.maps.Marker({
           icon: 'marker-icon.png',
@@ -152,7 +151,7 @@
          title: tpinfo[i].tpname
       });
         marker.index = i;
-        marker.addListener('click', function() {
+      marker.addListener('click', function() {
       taskdef.push(this.index);
      updateTask();
     });
@@ -176,9 +175,7 @@
     }
   }
 
-  
-
-  function changeBase() {
+    function changeBase() {
     var clipalt = $('#airclip').val();
     var i;
     var j;
@@ -189,7 +186,7 @@
         airspacePolygons[i].setMap(null);
       }
     }
-    for (j = 0; j < airspacePolygons.length; j++) {
+    for (j = 0; j < airspaceCircles.length; j++) {
       if (circleBases[j] < clipalt) {
         airspaceCircles[j].setMap(map);
       } else {
