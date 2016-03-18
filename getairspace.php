@@ -70,7 +70,7 @@ require_once("../db_inc.php");
 $mysqli=new mysqli($dbserver,$username,$password,$database);
 $tpoint=json_decode($_POST['point']);
 $ch = curl_init();
-  $url="https://search.mapzen.com/v1/reverse?api_key=search-XXXXX&size=1&sources=qs&layers=locality&point.lat=$tpoint->latitude&point.lon=$tpoint->longitude";
+  $url="https://search.mapzen.com/v1/reverse?api_key=search-mITW91A&size=1&sources=qs&layers=locality&point.lat=$tpoint->latitude&point.lon=$tpoint->longitude";
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT_MS,3000);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -78,11 +78,7 @@ $ch = curl_init();
       $data=json_decode($json);
       if(isset($data->features[0]->properties->country_a)) {
            if(array_key_exists($data->features[0]->properties->country_a,$countries)) {
-               //$airspace= getcountrydata( $sql=$countries[$data->features[0]->properties->country_a]);
                $country=$countries[$data->features[0]->properties->country_a];
-              // $airspace=getcountrydata("country='".$country."'");
-              // $retval['polygons']=$airspace['polygons'];
-               //$retval['circles']=$airspace['circles'];
                $retval['polygons']=getpolygons("country='".$country."'");
                $retval['circles']=getcircles("country='".$country."'");
                $retval['message']="OK";
@@ -92,9 +88,7 @@ $ch = curl_init();
           }
            }
         else  {
-              //reverse geocode failed to find the country
-               // $sql="geo";
-               
+              $retval['message'] = "Couldn't identify country for airspace";
         }
     }
     else {

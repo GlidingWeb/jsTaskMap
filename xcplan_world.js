@@ -212,6 +212,7 @@
      center: new google.maps.LatLng(0, 0),
      zoom: 2,
      maxZoom: 2,
+     mapTypeId: google.maps.MapTypeId.TERRAIN,
      streetViewControl: false,
      styles: myStyles
    };

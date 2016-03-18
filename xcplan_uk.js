@@ -55,11 +55,11 @@
       center: new google.maps.LatLng(53.5, -1),
       zoom: 7,
       maxZoom: 18,
+      mapTypeId: google.maps.MapTypeId.TERRAIN,
       streetViewControl: false,
       styles: myStyles
     };
     map = new google.maps.Map($('#map').get(0), mapOpt);
-
     map.addListener('idle', function() {
       if (labelsShowing) {
         showLabels();
