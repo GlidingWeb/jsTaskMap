@@ -6,7 +6,6 @@
    var j;
    $.post("getairspace.php",
      {
-       point: JSON.stringify(tpoint),
        mbr: JSON.stringify(filedata)
      },
      function(data, status) {
