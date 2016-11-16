@@ -228,7 +228,11 @@
   }
 
   $(document).ready(function() {
-
+    if (window.opener) {
+               if ((window.opener.name === 'igcview') || (window.opener.name === 'flarmwrite')) {
+                 $('#exportdiv').show();
+               }
+        }
     $(' input[name=wpt_vis]:radio').change(function() {
       if ($(this).val() === 'show') {
         showMarkers();
@@ -264,7 +268,25 @@
       changeBase();
     });
 
-   
+    $('#copytask').click(function() {
+     var i;
+     var exportDetail = {
+       name: [],
+       coords: []
+     };
+     if (window.opener && !window.opener.closed && ((window.opener.name === 'igcview') || (window.opener.name === 'flarmwrite'))) {
+       for (i = 0; i < taskdef.length; i++) {
+         exportDetail.name[i] = tpinfo[taskdef[i]].tpname;
+         var coord = {lat: tpinfo[taskdef[i]].latitude,lng:  tpinfo[taskdef[i]].longitude};
+         exportDetail.coords.push(coord);
+       }
+       var retval = window.opener.ns.importTask(exportDetail);
+       alert(retval);
+     }
+     else {
+       alert("Copy operation failed");
+     }
+   });
 
     $('#tasksheet').click(function() {
       exportTask("taskbrief.html");

@@ -236,27 +236,7 @@
      window.open("xcplanabout.html", "_blank");
    });
 
-   $('#copytask').click(function() {
-     var i;
-     var exportDetail = {
-       tpname: [],
-       lat: [],
-       lng: []
-     };
-
-     if (window.opener && !window.opener.closed && ((window.opener.name === 'igcview') || (window.opener.name === 'flarmwrite'))) {
-       for (i = 0; i < taskdef.length; i++) {
-         exportDetail.tpname[i] = tpinfo[taskdef[i]].tpname;
-         exportDetail.lat[i] = tpinfo[taskdef[i]].latitude;
-         exportDetail.lng[i] = tpinfo[taskdef[i]].longitude;
-       }
-       var retval = window.opener.ns.importTask(exportDetail);
-       alert(retval);
-     }
-     else {
-       alert("Copy operation failed");
-     }
-   });
+  
 
    $('#fileControl').change(function() {
      var filetypes = [".CUP", ".DAT"];
@@ -269,11 +249,6 @@
            var fileinfo = parseTps(this.result, extension);
            if (tpinfo.length > 1) {
              $('#maincontrol').show();
-             if (window.opener) {
-               if ((window.opener.name === 'igcview') || (window.opener.name === 'flarmwrite')) {
-                 $('#exportdiv').show();
-               }
-             }
              map.setOptions({
                maxZoom: 18
              });
