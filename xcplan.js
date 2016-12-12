@@ -271,16 +271,16 @@
     $('#copytask').click(function() {
      var i;
      var exportDetail = {
-       name: [],
+       names: [],
        coords: []
      };
      if (window.opener && !window.opener.closed && ((window.opener.name === 'igcview') || (window.opener.name === 'flarmwrite'))) {
        for (i = 0; i < taskdef.length; i++) {
-         exportDetail.name[i] = tpinfo[taskdef[i]].tpname;
+         exportDetail.names[i] = tpinfo[taskdef[i]].tpname;
          var coord = {lat: tpinfo[taskdef[i]].latitude,lng:  tpinfo[taskdef[i]].longitude};
          exportDetail.coords.push(coord);
        }
-       var retval = window.opener.ns.importTask(exportDetail);
+       var retval = window.opener.importTask(exportDetail);
        alert(retval);
      }
      else {
