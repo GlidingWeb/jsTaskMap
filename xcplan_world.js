@@ -1,5 +1,32 @@
 'use strict';
 
+function tpZoom(pointref) {
+    map.panTo({lat: tpinfo[pointref].latitude,lng: tpinfo[pointref].longitude});
+     map.setZoom(12);
+}
+
+function zoomTo(tpval) {
+      var i;
+      var length=tpval.length;
+      var list=[];
+      var tpno;
+      tpval=tpval.toUpperCase();
+      for(i =0;i < tpinfo.length; i++) {
+          if((tpinfo[i].trigraph.substr(0,3).toUpperCase()===tpval)||(tpinfo[i].tpname.toUpperCase().indexOf(tpval) ===0)) {
+              list.push(i);
+          }
+      }
+      if(list.length===1) {
+          tpZoom(list[0]);
+      }
+      else {
+          for(i=0; i < list.length;i++) {
+              $('#tpdetail').append("<p><input type='radio' name='gettp' value='" +list[i] +"'>"+ tpinfo[list[i]].tpname + "</p>");
+          }
+     $('#tpselect').show();
+      }
+  }
+
  function getAirspace(tpoint, filedata) {
    zapAirspace();
    var i;
@@ -216,6 +243,7 @@
      styles: myStyles
    };
    map = new google.maps.Map($('#map').get(0), mapOpt);
+   makeTpMarkers();
 
    $('#acceptor').click(function() {
      $('#disclaimer').hide();
@@ -236,7 +264,12 @@
      window.open("xcplanabout.html", "_blank");
    });
 
-  
+  $('#thistp').click(function() {
+      var tp=$('input[name=gettp]:checked').val();
+      console.log(tp);
+      tpZoom(tp);
+      $('#tpselect').hide();
+  });
 
    $('#fileControl').change(function() {
      var filetypes = [".CUP", ".DAT"];

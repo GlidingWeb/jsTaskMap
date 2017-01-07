@@ -11,7 +11,7 @@
   var labelsShowing = false;
   var taskdef = [];
   var taskLine = null;
-  var markersShowing;
+  var tpMarkers=[];
   var airDrawOptions = {
     strokeColor: 'black',
     strokeOpacity: 0.8,
@@ -21,6 +21,30 @@
     clickable: false
   };
 
+  function makeTpMarkers() {
+      var i;
+      var label;
+      var marker;
+      var zindex;
+      for(i=0; i < 11; i++) {
+        zindex=2000 + 10*i;
+        if(i===10) {
+            label='F';
+        }
+        else {
+        label=i.toString();
+        }
+         marker=new google.maps.Marker({
+        label: label,
+        zIndex: zindex,
+        clickable: false
+      });
+        tpMarkers.push(marker);
+      }
+  }
+  
+  
+  
   function showLabels() {
     var mapbounds = map.getBounds();
     var i;
@@ -69,6 +93,9 @@
     var ptcoords = {};
     $('#tasktab').html("");
     $('#tasklength').text("");
+ for(i = taskdef.length-1; i < 11;i++) {
+      tpMarkers[i].setMap(null);
+  }
     for (i = 0; i < taskdef.length; i++) {
       switch (i) {
         case 0:
@@ -94,6 +121,19 @@
         lng: tpinfo[pointref].longitude
       };
       taskcoords.push(ptcoords);
+   if (((i < taskdef.length -1)|| (i===0)) && (i < 10)) {
+       tpMarkers[i].setPosition(ptcoords);
+       tpMarkers[i].setMap(map);
+  }
+      else {
+          if(pointref===taskdef[0]) {
+              tpMarkers[10].setMap(null);
+          }
+          else {
+              tpMarkers[10].setPosition(ptcoords);
+              tpMarkers[10].setMap(map);
+          }
+      }
       if (i > 0) {
         distance += leginfo(tpinfo[taskdef[i - 1]], tpinfo[pointref]).distance;
       }
@@ -115,7 +155,11 @@
         $('.printbutton').prop("disabled", true);
       }
     }
-
+/*
+  for(i = taskdef.length-1; i < 10;i++) {
+      tpMarkers[i].setMap(null);
+  }
+  */
     if (distance > 0) {
       $('#tasklength').text("Task length: " + (distance).toFixed(1) + "Km");
     }
@@ -130,6 +174,7 @@
       pixelOffset: offset,
       closeBoxURL: "",
      visible : true,
+     pane: 'mapPane',
       enableEventPropagation: true
     };
     var ibLabel = new InfoBox(myOptions);
@@ -159,7 +204,7 @@
        markerList.push(marker);
        markersShowing=true;
        label=makeLabel(tpinfo[i].trigraph,labelOffset);
-      labelList.push(label);
+       labelList.push(label);
       }
       $('input:radio[name=wpt_vis]')[0].checked = true;
       $('input:radio[name=label_vis]')[1].checked = true;
@@ -296,6 +341,13 @@
       exportTask("declaration.html");
     });
 
+    $('#tpzoom').click(function() {
+        var point=$('#findpt').val();
+        if(point.length > 2) {
+          zoomTo(point);
+        }
+    });
+    
     var airspaceClip = '';
     if (window.localStorage) {
       try {

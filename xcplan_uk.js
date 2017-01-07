@@ -7,6 +7,20 @@
     });
   }
 
+  function zoomTo(tpval) {
+      var i;
+      var length=tpval.length;
+      var list=[];
+      tpval=tpval.toUpperCase();
+      for(i =0;i < tpinfo.length; i++) {
+          if(tpinfo[i].trigraph.substr(0,3).toUpperCase()===tpval) {
+              list.push(tpinfo[i]);
+          }
+      }
+       map.panTo({lat:list[0].latitude,lng: list[0].longitude});
+        map.setZoom(12);
+  }
+  
   function getAirspace() {
     var i;
     var newPolypts = [];
@@ -60,6 +74,7 @@
       styles: myStyles
     };
     map = new google.maps.Map($('#map').get(0), mapOpt);
+     makeTpMarkers();
     map.addListener('idle', function() {
       if (labelsShowing) {
         showLabels();

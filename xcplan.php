@@ -9,7 +9,7 @@ header('Location: index.html');
 <head>
 <meta charset="UTF-8" />
  <title>Soaring task planner</title>
-<script  src="https://maps.googleapis.com/maps/api/js?key=SECRET&callback=initMap"></script>
+<script  src="https://maps.googleapis.com/maps/api/js?key=SECRET"></script>
 <script src="lib/infobox.js"></script>
 <script src="lib/jquery-2.1.3.min.js"></script>
 <script  src="geocalc.js"></script>
@@ -90,25 +90,44 @@ echo "- UK version";
  <hr />
  <h4>Print:</h4>
  <button id="tasksheet" class="printbutton" disabled>Task Briefing</button><button id="declaration" class="printbutton" disabled>Declaration</button>
- <?php
-   if($version==='world') {
-   echo "<hr>";
-   echo "<div id='exportdiv'>";
-  echo "<h4>Export:</h4>";
- echo "<button id='copytask' class='printbutton' disabled>Copy task</button> to IGCWebview";
- echo "</div>";
- }
- ?>
+<hr>
+<div id="zoomto">
+<h4>Zoom to waypoint</h4>
+<p>
+<?php
+if($version==='uk') {
+echo "Enter trigraph: ";
+}
+else {
+echo "Enter first part of name (min 3 characters): ";
+}
+?>
+<input type='text' id='findpt' />&nbsp; <button id='tpzoom'>GO</button></p>
+</div>
+<hr>
+<div id='exportdiv'>
+<h4>Export:</h4>
+<button id='copytask' class='printbutton' disabled>Copy task</button> to IGCWebview
+ </div>
     </div>
    </div>
    
-  <div id='disclaimer'>
+  <div id='disclaimer' class='dialogue'>
        <p>
     <b>Warning:</b> Unless the "no airspace" option is selected opposite, outlines of controlled airspace  will be displayed on the map provided we have data for the area.</p>
     <p>This information is for guidance only.  It  may not be accurate,  current or complete and is not valid for navigation or flight planning.   Always consult the official publications for current and correct information. 
     </p>
+    <p>Also note only controlled airspace in the area covered by the waypoints will be shown.</p>
     <button id='acceptor'>Accept</button>
     </div>
+    
+    <div id='tpselect' class='dialogue'>
+   <h4>Select Waypoint</h4>
+   <div id='tpdetail'>
+   </div>
+   <button id='thistp'>Go</button>
+   </div>
+    
 </body>
 </html>
 

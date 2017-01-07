@@ -58,23 +58,26 @@ display: none;
 float: right;
 }
 
-#disclaimer {
-  display: inline-block;
+div.dialogue {
+    display: inline-block;
     position: fixed;
+    border-style: solid;
+   border-width: 2px;
+   overflow: auto;
+  z-index: 2000;
+  background-color: white;
+}
+
+#disclaimer  {
+  width: 30%;
+  height: 250px;
+  padding: 15px;
+  margin: auto;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 30%;
-  height: 250px;
-  padding: 15px;
-    margin: auto;
-   border-style: solid;
-   border-width: 2px;
-   overflow: auto;
-z-index: 2000;
-background-color: white;
-}
+ }
 
 #maincontrol {
   display: none;
@@ -114,4 +117,20 @@ display: none;
                  opacity: 0.8;
                  z-index: 200;
 }
+
+#findpt {
+width: 5ch;
+}
+
+#tpselect {
+display: none;
+ width: 25ch;
+  height: 250px;
+  padding: 15px;
+  left: 70%;
+  top: 40%;
+}
+
+
+
    
