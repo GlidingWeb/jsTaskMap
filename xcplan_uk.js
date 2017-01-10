@@ -17,8 +17,13 @@
               list.push(tpinfo[i]);
           }
       }
+       if(list.length===0) {
+          alert("Turning point not found");
+      }
+      else {
        map.panTo({lat:list[0].latitude,lng: list[0].longitude});
         map.setZoom(12);
+      }
   }
   
   function getAirspace() {

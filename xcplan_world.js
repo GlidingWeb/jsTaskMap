@@ -16,14 +16,19 @@ function zoomTo(tpval) {
               list.push(i);
           }
       }
-      if(list.length===1) {
-          tpZoom(list[0]);
-      }
-      else {
+   switch(list.length) {
+         case 0:
+             alert("Turning point not found");
+             break;
+         case 1:
+             tpZoom(list[0]);
+             break;
+         default:
           for(i=0; i < list.length;i++) {
               $('#tpdetail').append("<p><input type='radio' name='gettp' value='" +list[i] +"'>"+ tpinfo[list[i]].tpname + "</p>");
           }
-     $('#tpselect').show();
+              $('#tpselect').show();
+            break;
       }
   }
 
